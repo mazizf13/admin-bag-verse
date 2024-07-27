@@ -1,3 +1,4 @@
+import Navbar from "@/components/navbar";
 import db from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -16,7 +17,7 @@ export default async function DashboardLayout({
     const store = await db.store.findFirst({
         where: {
             id: params.storeId,
-            userId
+            userId,
         }
     })
 
@@ -26,7 +27,7 @@ export default async function DashboardLayout({
 
     return (
         <>
-            <div>This is navbar</div>
+            <Navbar/>
             {children}
         </>
     )
