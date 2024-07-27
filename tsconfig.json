@@ -21,6 +21,12 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(auth)/(routes)/sign-in/[[...sign-in]]"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "app/(auth)/(routes)/sign-in/[[...sign-in]]"
+  ],
   "exclude": ["node_modules"]
 }
