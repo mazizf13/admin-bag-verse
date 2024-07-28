@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Heading } from '@/components/ui/heading';
+import ImageUpload from '@/components/ui/image-upload';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useOrigin } from '@/hooks/use-origin';
@@ -43,10 +44,12 @@ export const BannerForm: React.FC<BannerFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "Edit Banner" : "Add Banner";
-  const description = initialData ? "Edit Store Banner" : "Add Banner";
-  const toastMessage = initialData ? "Banner updated succesfully" : "Banner added succesfullt";
-  const action = initialData ? "Save Banner" : "Add Banner";
+  const title = initialData ? 'Edit Banner' : 'Add Banner';
+  const description = initialData ? 'Edit Store Banner' : 'Add Banner';
+  const toastMessage = initialData
+    ? 'Banner updated succesfully'
+    : 'Banner added succesfullt';
+  const action = initialData ? 'Save Banner' : 'Add Banner';
 
   const form = useForm<BannerFormValues>({
     resolver: zodResolver(formSchema),
@@ -59,9 +62,17 @@ export const BannerForm: React.FC<BannerFormProps> = ({ initialData }) => {
   const onSubmit = async (data: BannerFormValues) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/stores/${params.storeId}`, data);
+      if (initialData) {
+        await axios.patch(
+          `/api/${params.storeId}/banners/${params.bannerId}`,
+          data,
+        );
+      } else {
+        await axios.post(`/api/${params.storeId}/banners`, data);
+      }
       router.refresh();
-      toast.success('Store updated successfully');
+      router.push(`/${params.storeId}/banners`);
+      toast.success(toastMessage);
     } catch (error) {
       toast.error('Check the input data again!');
     } finally {
@@ -72,7 +83,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/stores/${params.storeId}`);
+      await axios.delete(`/api/${params.storeId}/banners/${params.bannerId}`);
       router.refresh();
       router.push('/');
       toast.success('Store deleted successfully');
@@ -95,14 +106,14 @@ export const BannerForm: React.FC<BannerFormProps> = ({ initialData }) => {
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
-        <Button
-          variant="destructive"
-          disabled={loading}
-          size="sm"
-          onClick={() => setOpen(true)}
-        >
-          <Trash className="h-4 w-4" />
-        </Button>
+          <Button
+            variant="destructive"
+            disabled={loading}
+            size="sm"
+            onClick={() => setOpen(true)}
+          >
+            <Trash className="h-4 w-4" />
+          </Button>
         )}
       </div>
       <Separator />
@@ -124,6 +135,25 @@ export const BannerForm: React.FC<BannerFormProps> = ({ initialData }) => {
                       disabled={loading}
                       {...field}
                     ></Input>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      disabled={loading}
+                      onChange={(url) => field.onChange(url)}
+                      onRemove={() => field.onChange('')}
+                      value={field.value ? [field.value] : []}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
