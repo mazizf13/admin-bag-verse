@@ -27,7 +27,7 @@ export const ApiList: React.FC<ApiListProps> = ({
       />
       <ApiAlert
         title="GET"
-        description={`${baseUrl}/${indicatorName}/${indikatorId}`}
+        description={`${baseUrl}/${indicatorName}/{${indikatorId}}`}
         variant="public"
       />
       <ApiAlert
@@ -37,12 +37,12 @@ export const ApiList: React.FC<ApiListProps> = ({
       />
       <ApiAlert
         title="PATCH"
-        description={`${baseUrl}/${indicatorName}/${indikatorId}`}
+        description={`${baseUrl}/${indicatorName}/{${indikatorId}}`}
         variant="admin"
       />
       <ApiAlert
         title="DELETE"
-        description={`${baseUrl}/${indicatorName}/${indikatorId}`}
+        description={`${baseUrl}/${indicatorName}/{${indikatorId}}`}
         variant="admin"
       />
     </>
